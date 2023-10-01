@@ -105,6 +105,58 @@ public class ContainerService : IContainerService
         }
     }
 
+    public async Task StartAsync(string id)
+    {
+        await _containerChannel.Writer.WriteAsync(async () =>
+        {
+            try
+            {
+                using DockerClient dockerClient = GetDockerClient();
+                await dockerClient.Containers.StartContainerAsync(
+                    id,
+                    new Docker.DotNet.Models.ContainerStartParameters()
+                );
+
+                _repository.Update(new(id, Constants.ContainerStatusRunning));
+                _logger.LogInformation(Constants.ResponseMessageContainerIdWasStarted, id);
+            }
+            catch (KeyNotFoundException)
+            {
+                _logger.LogError(Constants.ResponseMessageContainerIdWasNotFound, id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+        });
+    }
+
+    public async Task StopAsync(string id)
+    {
+        await _containerChannel.Writer.WriteAsync(async () =>
+        {
+            try
+            {
+                using DockerClient dockerClient = GetDockerClient();
+                await dockerClient.Containers.StopContainerAsync(
+                    id,
+                    new Docker.DotNet.Models.ContainerStopParameters()
+                );
+
+                _repository.Update(new(id, Constants.ContainerStatusStopped));
+                _logger.LogInformation(Constants.ResponseMessageContainerIdWasStopped, id);
+            }
+            catch (KeyNotFoundException)
+            {
+                _logger.LogError(Constants.ResponseMessageContainerIdWasNotFound, id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+        });
+    }
+
     private static DockerClient GetDockerClient()
     {
         return new DockerClientConfiguration().CreateClient();

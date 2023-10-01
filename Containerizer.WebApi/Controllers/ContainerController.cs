@@ -44,4 +44,23 @@ public class ContainerController : ControllerBase
         return Ok(container.Status);
     }
 
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Route(Constants.RouteStartFromId)]
+    public async Task<IActionResult> Start([FromRoute] string id)
+    {
+        await _containerService.StartAsync(id);
+        return Ok(Constants.ResponseMessageContainerStartRequested);
+    }
+
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Route(Constants.RouteStopFromId)]
+    public async Task<IActionResult> Stop([FromRoute] string id)
+    {
+        await _containerService.StopAsync(id);
+        return Ok(Constants.ResponseMessageContainerStopRequested);
+    }
 }
