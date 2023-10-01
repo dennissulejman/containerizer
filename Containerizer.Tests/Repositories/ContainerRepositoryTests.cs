@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Containerizer.WebApi.Models;
 using Containerizer.WebApi.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -28,10 +29,17 @@ public class ContainerRepositoryTests
         Assert.ThrowsException<KeyNotFoundException>(() => _repository.Get("NonExisting"));
     }
 
+    [TestMethod]
+    public void UpdateNonExistingContainer_ThrowsKeyNotFoundException()
+    {
+        Assert.ThrowsException<KeyNotFoundException>(
+            () => _repository.Update(new Container("NonExisting", ""))
+        );
+    }
 
     [TestMethod]
     public void RemoveNonExistingContainer_ThrowsKeyNotFoundException()
     {
         Assert.ThrowsException<KeyNotFoundException>(() => _repository.Remove("NonExisting"));
     }
-    }
+}

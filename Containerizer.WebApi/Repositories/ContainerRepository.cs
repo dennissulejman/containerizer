@@ -24,6 +24,17 @@ public class ContainerRepository : IContainerRepository
         }
     }
 
+    public void Update(Container container)
+    {
+        if (_containers.TryGetValue(container.Id, out string? _))
+        {
+            _containers[container.Id] = container.Status;
+        }
+        else
+        {
+            throw new KeyNotFoundException();
+        }
+    }
 
     public void Remove(string id)
     {
