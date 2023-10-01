@@ -5,4 +5,5 @@ namespace Containerizer.WebApi.Abstractions.Repositories;
 public interface IContainerRepository
 {
     void Add(Container container);
+    void Remove(string id);
 }

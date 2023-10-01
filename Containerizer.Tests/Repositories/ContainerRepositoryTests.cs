@@ -21,4 +21,10 @@ public class ContainerRepositoryTests
     {
         Assert.ThrowsException<ArgumentException>(() => _repository.Add(new Container("", "")));
     }
+
+    [TestMethod]
+    public void RemoveNonExistingContainer_ThrowsKeyNotFoundException()
+    {
+        Assert.ThrowsException<KeyNotFoundException>(() => _repository.Remove("NonExisting"));
+    }
     }

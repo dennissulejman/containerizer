@@ -23,4 +23,15 @@ public class ContainerController : ControllerBase
         await _containerService.CreateAsync(imageName);
         return Ok(Constants.ResponseMessageContainerContainerCreationStarted);
     }
+
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Route(Constants.RouteDeleteFromId)]
+    public async Task<IActionResult> Delete([FromRoute] string id)
+    {
+        await _containerService.DeleteAsync(id);
+        return Ok(Constants.ResponseMessageContainerDeletionStarted);
+    }
+
 }

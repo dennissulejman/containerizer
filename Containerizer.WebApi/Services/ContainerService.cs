@@ -58,6 +58,32 @@ public class ContainerService : IContainerService
             }
         });
     }
+
+    public async Task DeleteAsync(string id)
+    {
+        await _containerChannel.Writer.WriteAsync(async () =>
+        {
+            try
+            {
+                using DockerClient dockerClient = GetDockerClient();
+                await dockerClient.Containers.RemoveContainerAsync(
+                    id,
+                    new Docker.DotNet.Models.ContainerRemoveParameters()
+                );
+
+                _repository.Remove(id);
+                _logger.LogInformation(Constants.ResponseMessageContainerIdWasDeleted, id);
+            }
+            catch (KeyNotFoundException)
+            {
+                _logger.LogError(Constants.ResponseMessageContainerIdWasNotFound, id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+        });
+    }
     private static DockerClient GetDockerClient()
     {
         return new DockerClientConfiguration().CreateClient();
