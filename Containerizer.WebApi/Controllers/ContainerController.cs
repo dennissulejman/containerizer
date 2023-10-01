@@ -34,4 +34,14 @@ public class ContainerController : ControllerBase
         return Ok(Constants.ResponseMessageContainerDeletionStarted);
     }
 
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Route(Constants.RouteStatusFromId)]
+    public IActionResult Status([FromRoute] string id)
+    {
+        Models.Container container = _containerService.Get(id);
+        return Ok(container.Status);
+    }
+
 }

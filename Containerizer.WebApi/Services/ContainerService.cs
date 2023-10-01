@@ -84,6 +84,27 @@ public class ContainerService : IContainerService
             }
         });
     }
+
+    public Container Get(string id)
+    {
+        try
+        {
+            Container container = _repository.Get(id);
+            _logger.LogInformation(Constants.ResponseMessageContainerIdWasFetched, id);
+            return container;
+        }
+        catch (KeyNotFoundException)
+        {
+            _logger.LogError(Constants.ResponseMessageContainerIdWasNotFound, id);
+            return new Container("", $"Container {id} was not found");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return new Container("", ex.Message);
+        }
+    }
+
     private static DockerClient GetDockerClient()
     {
         return new DockerClientConfiguration().CreateClient();

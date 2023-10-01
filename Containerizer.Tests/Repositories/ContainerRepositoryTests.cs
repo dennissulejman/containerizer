@@ -23,6 +23,13 @@ public class ContainerRepositoryTests
     }
 
     [TestMethod]
+    public void GetNonExistingContainer_ThrowsKeyNotFoundException()
+    {
+        Assert.ThrowsException<KeyNotFoundException>(() => _repository.Get("NonExisting"));
+    }
+
+
+    [TestMethod]
     public void RemoveNonExistingContainer_ThrowsKeyNotFoundException()
     {
         Assert.ThrowsException<KeyNotFoundException>(() => _repository.Remove("NonExisting"));

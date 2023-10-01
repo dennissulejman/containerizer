@@ -12,6 +12,19 @@ public class ContainerRepository : IContainerRepository
         _containers.Add(container.Id, container.Status);
     }
 
+    public Container Get(string id)
+    {
+        if (_containers.TryGetValue(id, out string? status))
+        {
+            return new(id, status);
+        }
+        else
+        {
+            throw new KeyNotFoundException();
+        }
+    }
+
+
     public void Remove(string id)
     {
         if (_containers.TryGetValue(id, out string? _))
